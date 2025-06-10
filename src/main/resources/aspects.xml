@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <context:component-scan base-package="org.example" />
+    <aop:aspectj-autoproxy />
+
+
+    <bean id="logAspect" class="org.example.aspect.LogAspect"/>
+    <bean id="aopDemoService" class="org.example.service.AopDemoServiceImpl"/>
+
+
+    <aop:config>
+        <aop:aspect ref="logAspect">
+            <aop:pointcut id="pointCutMethod" expression="execution(* org.example.service.*.* (..))"/>
+            <aop:around method="doAround" pointcut-ref="pointCutMethod" />
+            <aop:before method="doBefore" pointcut-ref="pointCutMethod" />
+            <aop:after method="doAfter" pointcut-ref="pointCutMethod" />
+            <aop:after-returning method="doAfterReturning" pointcut-ref="pointCutMethod" returning="result" />
+            <aop:after-throwing method="doAfterThrowing" pointcut-ref="pointCutMethod" throwing="e" />
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>
